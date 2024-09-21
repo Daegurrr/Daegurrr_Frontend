@@ -1,18 +1,18 @@
-import styled from "styled-components";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
-import CategoryButton from "../../../components/common/button/CategoryButton";
+import CategoryButton from '../../../components/common/button/CategoryButton';
 
-import ActBank from "../../../assets/button/category/active/bank.png";
-import InActBank from "../../../assets/button/category/inactive/bank.png";
-import ActPark from "../../../assets/button/category/active/park.png";
-import InActPark from "../../../assets/button/category/inactive/park.png";
-import ActWelfare from "../../../assets/button/category/active/welfare.png";
-import InActWelfare from "../../../assets/button/category/inactive/welfare.png";
-import ActOld from "../../../assets/button/category/active/old.png";
-import InActOld from "../../../assets/button/category/inactive/old.png";
-import DownBtn from "../../../assets/dropdown/downBtn.png";
+import ActBank from '../../../assets/button/category/active/bank.png';
+import InActBank from '../../../assets/button/category/inactive/bank.png';
+import ActPark from '../../../assets/button/category/active/park.png';
+import InActPark from '../../../assets/button/category/inactive/park.png';
+import ActWelfare from '../../../assets/button/category/active/welfare.png';
+import InActWelfare from '../../../assets/button/category/inactive/welfare.png';
+import ActOld from '../../../assets/button/category/active/old.png';
+import InActOld from '../../../assets/button/category/inactive/old.png';
+import DownBtn from '../../../assets/dropdown/downBtn.png';
 
 const categoryButtons = [
   {
@@ -23,7 +23,6 @@ const categoryButtons = [
     marginright: '8px',
     label: '공원',
     facilityType: 'PARK',
-
   },
   {
     activeSrc: ActBank,
@@ -33,7 +32,6 @@ const categoryButtons = [
     marginright: '8px',
     label: '금융기관',
     facilityType: 'FINANCIAL_INSTITUTION',
-
   },
   {
     activeSrc: ActWelfare,
@@ -60,18 +58,20 @@ type CategoryBtnListProps = {
 };
 
 const CategoryBtnList = ({ onCategorySelect }: CategoryBtnListProps) => {
+  const [activeCategory, setActiveCategory] = useState<string | null>(null); // 활성화된 카테고리 상태 관리
+
   const link = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
     import.meta.env.VITE_APP_REST_API_KEY
-  }&redirect_uri=${import.meta.env.VITE_APP_REDIRECT_URL}
-`;
+  }&redirect_uri=${import.meta.env.VITE_APP_REDIRECT_URL}`;
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const onClickDropDown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const accessToken = localStorage.getItem("accessToken");
-  const profileUrl = localStorage.getItem("profileUrl");
+  const accessToken = localStorage.getItem('accessToken');
+  const profileUrl = localStorage.getItem('profileUrl');
 
   const onClickLogin = () => {
     window.location.href = link;
@@ -79,14 +79,18 @@ const CategoryBtnList = ({ onCategorySelect }: CategoryBtnListProps) => {
 
   const handleLogout = () => {
     localStorage.clear();
-
     window.location.reload();
   };
 
   const navigate = useNavigate();
 
   const handleNavigateBoard = () => {
-    navigate('/board')
+    navigate('/board');
+  };
+
+  const handleCategoryClick = (facilityType: string) => {
+    setActiveCategory(facilityType); // 클릭된 카테고리 활성화
+    onCategorySelect(facilityType); // 부모로 전달된 콜백 실행
   };
 
   return (
@@ -100,17 +104,17 @@ const CategoryBtnList = ({ onCategorySelect }: CategoryBtnListProps) => {
           >
             <img
               style={{
-                width: "20px",
-                height: "20px",
-                borderRadius: "50%",
-                marginRight: "4px",
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                marginRight: '4px',
               }}
-              src={profileUrl ?? ""}
+              src={profileUrl ?? ''}
               alt=""
             />
-            {localStorage.getItem("name")}
+            {localStorage.getItem('name')}
             <img
-              style={{ width: "7.93px", height: "8px", marginLeft: "4px" }}
+              style={{ width: '7.93px', height: '8px', marginLeft: '4px' }}
               src={DownBtn}
               alt=""
             />
@@ -118,7 +122,7 @@ const CategoryBtnList = ({ onCategorySelect }: CategoryBtnListProps) => {
           {isDropdownOpen && (
             <DropdownMenu>
               <DropdownItem onClick={handleLogout}>로그아웃</DropdownItem>
-              <DropdownItem onClick={() => console.log("환경설정 클릭")}>
+              <DropdownItem onClick={() => console.log('환경설정 클릭')}>
                 환경설정
               </DropdownItem>
             </DropdownMenu>
@@ -137,10 +141,15 @@ const CategoryBtnList = ({ onCategorySelect }: CategoryBtnListProps) => {
       )}
 
       <LoginBtnWrapper>
-        <CategoryButton backgroundcolor="#e4000f" textcolor="#fff" onClick={handleNavigateBoard}>
+        <CategoryButton
+          backgroundcolor="#e4000f"
+          textcolor="#fff"
+          onClick={handleNavigateBoard}
+        >
           게시판
         </CategoryButton>
       </LoginBtnWrapper>
+
       <CategoryListWrapper>
         {categoryButtons.map((button, index) => (
           <CategoryButton
@@ -150,7 +159,14 @@ const CategoryBtnList = ({ onCategorySelect }: CategoryBtnListProps) => {
             width={button.width}
             height={button.height}
             marginright={button.marginright}
-            onClick={() => onCategorySelect(button.facilityType)}
+            onClick={() => handleCategoryClick(button.facilityType)}
+            backgroundcolor={
+              activeCategory === button.facilityType ? '#e4000f' : '#fff'
+            } // 클릭 시 배경 색 변경
+            textcolor={
+              activeCategory === button.facilityType ? '#fff' : '#747474'
+            } // 클릭 시 텍스트 색 변경
+            isActive={activeCategory === button.facilityType}
           >
             {button.label}
           </CategoryButton>
