@@ -1,5 +1,7 @@
+import Map from './components/Map';
+
 const MainPage = () => {
-  return <>123</>;
+  return <Map />;
 };
 
 export default MainPage;
