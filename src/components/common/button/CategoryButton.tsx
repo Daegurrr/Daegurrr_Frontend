@@ -2,7 +2,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 type ButtonProps = {
-  border?: string;
   backgroundColor?: string;
   textColor?: string;
 };
@@ -13,15 +12,16 @@ type LogoProps = {
   height?: string;
   activeSrc?: string;
   inactiveSrc?: string;
+  marginRight?: string;
 };
 
 const CategoryButton = ({
   children,
-  border,
   backgroundColor,
   textColor,
   width,
   height,
+  marginRight,
   activeSrc,
   inactiveSrc,
 }: ButtonProps &
@@ -32,7 +32,6 @@ const CategoryButton = ({
 
   return (
     <ButtonContainer
-      border={border}
       backgroundColor={backgroundColor}
       textColor={textColor}
       isActive={isActive}
@@ -44,6 +43,7 @@ const CategoryButton = ({
         width={width}
         height={height}
         isActive={isActive}
+        marginRight={marginRight}
       />
       {children}
     </ButtonContainer>
@@ -53,18 +53,21 @@ const CategoryButton = ({
 export default CategoryButton;
 
 const ButtonContainer = styled.button<ButtonProps & { isActive: boolean }>`
-  width: 100%;
+  /* width: 100%; */
+  height: 34px;
   border-radius: 16px;
   padding: 8px 12px;
+
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+
   display: flex;
   justify-content: center;
   align-items: center;
 
-  border: ${({ border }) => border || '0.75px solid #D9D9D9'};
+  border: 0.75px solid #d9d9d9;
   background-color: ${({ backgroundColor, isActive }) =>
     isActive ? '#e4000f' : backgroundColor || '#fff'};
   color: ${({ textColor, isActive }) =>
@@ -78,4 +81,5 @@ const ButtonContainer = styled.button<ButtonProps & { isActive: boolean }>`
 const ButtonLogo = styled.img<LogoProps & { isActive: boolean }>`
   width: ${({ width }) => width || 'auto'};
   height: ${({ height }) => height || 'auto'};
+  margin-right: ${({ marginRight }) => marginRight || '0px'};
 `;
