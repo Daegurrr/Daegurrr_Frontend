@@ -1,7 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
+
 import RootPage from '../pages/RootPage';
 import ErrorPage from '../pages/Error';
 import MainPage from '../pages/Main';
+import AuthCallBackPage from '../pages/Auth';
 
 const routesConfig = [
   {
@@ -15,6 +17,10 @@ const routesConfig = [
         element: <MainPage />,
       },
     ],
+  },
+  {
+    path: '/oauth/redirect',
+    element: <AuthCallBackPage />,
   },
 ];
 
