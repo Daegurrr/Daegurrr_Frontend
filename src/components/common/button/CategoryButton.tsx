@@ -4,6 +4,8 @@ import styled from 'styled-components';
 type ButtonProps = {
   backgroundcolor?: string;
   textcolor?: string;
+  activeBackgroundColor?: string;
+  activeTextColor?: string;
 };
 
 type ActionProps = {

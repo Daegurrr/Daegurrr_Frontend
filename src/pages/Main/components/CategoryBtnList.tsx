@@ -21,6 +21,7 @@ const categoryButtons = [
     height: '16px',
     marginright: '8px',
     label: '공원',
+    facilityType: 'PARK',
   },
   {
     activeSrc: ActBank,
@@ -29,6 +30,7 @@ const categoryButtons = [
     height: '15.63px',
     marginright: '8px',
     label: '금융기관',
+    facilityType: 'FINANCIAL_INSTITUTION',
   },
   {
     activeSrc: ActWelfare,
@@ -37,6 +39,7 @@ const categoryButtons = [
     height: '12px',
     marginright: '8px',
     label: '행정복지센터',
+    facilityType: 'LOCAL_OFFICE',
   },
   {
     activeSrc: ActOld,
@@ -45,10 +48,15 @@ const categoryButtons = [
     height: '18px',
     marginright: '8px',
     label: '노인시설',
+    facilityType: 'SENIOR_CENTER',
   },
 ];
 
-const CategoryBtnList = () => {
+type CategoryBtnListProps = {
+  onCategorySelect: (facilityType: string) => void;
+};
+
+const CategoryBtnList = ({ onCategorySelect }: CategoryBtnListProps) => {
   const link = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
     import.meta.env.VITE_APP_REST_API_KEY
   }&redirect_uri=${import.meta.env.VITE_APP_REDIRECT_URL}
@@ -133,6 +141,7 @@ const CategoryBtnList = () => {
             width={button.width}
             height={button.height}
             marginright={button.marginright}
+            onClick={() => onCategorySelect(button.facilityType)}
           >
             {button.label}
           </CategoryButton>

@@ -5,6 +5,7 @@ import { postUserPosition } from '../../../services/hooks/map/postUserPosition';
 
 import MarkerOverlay from '../../../components/feature/overlay/MarkerOverlay';
 import ReactDOM from 'react-dom';
+import { postCategoryData } from '../../../services/hooks/category/postCategoryData';
 
 type Item = {
   id: number;
@@ -18,6 +19,55 @@ const Map = () => {
   const setAddress = useLocationStore((state) => state.setAddress);
   const latitude = useLocationStore((state) => state.latitude);
   const longitude = useLocationStore((state) => state.longitude);
+
+  const updateMapWithMarkers = async (facilityType: string) => {
+    try {
+      const data: Item[] = await postCategoryData(facilityType, {
+        latitude: latitude!,
+        longitude: longitude!,
+      });
+      console.log('Received data:', data);
+
+      const container = document.getElementById('map') as HTMLElement;
+
+      // 새로운 지도 인스턴스 생성
+      const map = new window.kakao.maps.Map(container, {
+        center: new window.kakao.maps.LatLng(latitude, longitude),
+        level: 5,
+      });
+
+      // 새로운 마커 추가
+      data.forEach((item) => {
+        console.log('Marker position:', item.latitude, item.longitude);
+
+        const markerPosition = new window.kakao.maps.LatLng(
+          item.latitude,
+          item.longitude
+        );
+        const marker = new window.kakao.maps.Marker({
+          position: markerPosition,
+        });
+        marker.setMap(map);
+
+        // 커스텀 오버레이 생성 및 연결
+        const overlayDiv = document.createElement('div');
+        ReactDOM.render(<MarkerOverlay id={item.id} />, overlayDiv);
+        const customOverlay = new window.kakao.maps.CustomOverlay({
+          position: markerPosition,
+          content: overlayDiv,
+          yAnchor: 1,
+          zIndex: 1,
+        });
+
+        // 마커 클릭 시 오버레이 표시
+        window.kakao.maps.event.addListener(marker, 'click', () => {
+          customOverlay.setMap(map);
+        });
+      });
+    } catch (error) {
+      console.error('카테고리 데이터 가져오기 실패:', error);
+    }
+  };
 
   useEffect(() => {
     // 사용자 위치 정보 가져오기
@@ -135,7 +185,7 @@ const Map = () => {
         id="map"
         style={{ width: '100%', height: '100vh', position: 'relative' }}
       />
-      <CategoryBtnList />
+      <CategoryBtnList onCategorySelect={updateMapWithMarkers} />
     </>
   );
 };
