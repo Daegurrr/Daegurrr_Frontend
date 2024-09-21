@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 
+import CategoryBtnList from './CategoryBtnList';
+
 const Map = () => {
   useEffect(() => {
     // 스크립트를 동적으로 로드
@@ -38,7 +40,15 @@ const Map = () => {
     };
   }, []);
 
-  return <div id="map" style={{ width: '100%', height: '100vh' }}></div>;
+  return (
+    <>
+      <div
+        id="map"
+        style={{ width: '100%', height: '100vh', position: 'relative' }}
+      />
+      <CategoryBtnList />
+    </>
+  );
 };
 
 export default Map;
