@@ -1,50 +1,51 @@
-import styled from 'styled-components';
-import { useState } from 'react';
+import styled from "styled-components";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import CategoryButton from '../../../components/common/button/CategoryButton';
+import CategoryButton from "../../../components/common/button/CategoryButton";
 
-import ActBank from '../../../assets/button/category/active/bank.png';
-import InActBank from '../../../assets/button/category/inactive/bank.png';
-import ActPark from '../../../assets/button/category/active/park.png';
-import InActPark from '../../../assets/button/category/inactive/park.png';
-import ActWelfare from '../../../assets/button/category/active/welfare.png';
-import InActWelfare from '../../../assets/button/category/inactive/welfare.png';
-import ActOld from '../../../assets/button/category/active/old.png';
-import InActOld from '../../../assets/button/category/inactive/old.png';
-import DownBtn from '../../../assets/dropdown/downBtn.png';
+import ActBank from "../../../assets/button/category/active/bank.png";
+import InActBank from "../../../assets/button/category/inactive/bank.png";
+import ActPark from "../../../assets/button/category/active/park.png";
+import InActPark from "../../../assets/button/category/inactive/park.png";
+import ActWelfare from "../../../assets/button/category/active/welfare.png";
+import InActWelfare from "../../../assets/button/category/inactive/welfare.png";
+import ActOld from "../../../assets/button/category/active/old.png";
+import InActOld from "../../../assets/button/category/inactive/old.png";
+import DownBtn from "../../../assets/dropdown/downBtn.png";
 
 const categoryButtons = [
   {
     activeSrc: ActPark,
     inactiveSrc: InActPark,
-    width: '14.12px',
-    height: '16px',
-    marginright: '8px',
-    label: '공원',
+    width: "14.12px",
+    height: "16px",
+    marginright: "8px",
+    label: "공원",
   },
   {
     activeSrc: ActBank,
     inactiveSrc: InActBank,
-    width: '9.93px',
-    height: '15.63px',
-    marginright: '8px',
-    label: '금융기관',
+    width: "9.93px",
+    height: "15.63px",
+    marginright: "8px",
+    label: "금융기관",
   },
   {
     activeSrc: ActWelfare,
     inactiveSrc: InActWelfare,
-    width: '13.72px',
-    height: '12px',
-    marginright: '8px',
-    label: '행정복지센터',
+    width: "13.72px",
+    height: "12px",
+    marginright: "8px",
+    label: "행정복지센터",
   },
   {
     activeSrc: ActOld,
     inactiveSrc: InActOld,
-    width: '12.6px',
-    height: '18px',
-    marginright: '8px',
-    label: '노인시설',
+    width: "12.6px",
+    height: "18px",
+    marginright: "8px",
+    label: "노인시설",
   },
 ];
 
@@ -59,8 +60,8 @@ const CategoryBtnList = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const accessToken = localStorage.getItem('accessToken');
-  const profileUrl = localStorage.getItem('profileUrl');
+  const accessToken = localStorage.getItem("accessToken");
+  const profileUrl = localStorage.getItem("profileUrl");
 
   const onClickLogin = () => {
     window.location.href = link;
@@ -70,6 +71,12 @@ const CategoryBtnList = () => {
     localStorage.clear();
 
     window.location.reload();
+  };
+
+  const navigate = useNavigate();
+
+  const handleNavigateBoard = () => {
+    navigate('/board')
   };
 
   return (
@@ -83,17 +90,17 @@ const CategoryBtnList = () => {
           >
             <img
               style={{
-                width: '20px',
-                height: '20px',
-                borderRadius: '50%',
-                marginRight: '4px',
+                width: "20px",
+                height: "20px",
+                borderRadius: "50%",
+                marginRight: "4px",
               }}
-              src={profileUrl ?? ''}
+              src={profileUrl ?? ""}
               alt=""
             />
-            {localStorage.getItem('name')}
+            {localStorage.getItem("name")}
             <img
-              style={{ width: '7.93px', height: '8px', marginLeft: '4px' }}
+              style={{ width: "7.93px", height: "8px", marginLeft: "4px" }}
               src={DownBtn}
               alt=""
             />
@@ -101,7 +108,7 @@ const CategoryBtnList = () => {
           {isDropdownOpen && (
             <DropdownMenu>
               <DropdownItem onClick={handleLogout}>로그아웃</DropdownItem>
-              <DropdownItem onClick={() => console.log('환경설정 클릭')}>
+              <DropdownItem onClick={() => console.log("환경설정 클릭")}>
                 환경설정
               </DropdownItem>
             </DropdownMenu>
@@ -120,7 +127,7 @@ const CategoryBtnList = () => {
       )}
 
       <LoginBtnWrapper>
-        <CategoryButton backgroundcolor="#e4000f" textcolor="#fff">
+        <CategoryButton backgroundcolor="#e4000f" textcolor="#fff" onClick={handleNavigateBoard}>
           게시판
         </CategoryButton>
       </LoginBtnWrapper>
