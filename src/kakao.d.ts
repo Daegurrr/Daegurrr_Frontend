@@ -1,5 +1,25 @@
 declare global {
   namespace kakao.maps {
+    interface CustomOverlay {
+      new (options: CustomOverlayOptions): CustomOverlay;
+      setMap(map: Map | null): void;
+    }
+
+    interface CustomOverlayOptions {
+      position: LatLng | LatLngLiteral;
+      content: string;
+      yAnchor?: number;
+      clickable?: boolean;
+    }
+
+    interface event {
+      addListener<T>(
+        target: any,
+        type: string,
+        listener: (event: T) => void
+      ): void;
+    }
+
     interface MapOptions {
       center: LatLng;
       level: number;
@@ -17,15 +37,10 @@ declare global {
       constructor(container: HTMLElement, options: MapOptions);
     }
 
-    export class Marker {
-      constructor(options: MarkerOptions);
-      setMap(map: Map): void;
-    }
-
     class LatLng {
       constructor(lat: number, lng: number);
-      getLat(): number; // 추가
-      getLng(): number; // 추가
+      getLat(): number;
+      getLng(): number;
     }
 
     namespace services {
@@ -34,11 +49,11 @@ declare global {
           lng: number,
           lat: number,
           callback: (result: any, status: any) => void
-        ): void; // 추가
+        ): void;
       }
 
       const Status: {
-        OK: string; // 추가
+        OK: string;
       };
     }
 
@@ -51,4 +66,5 @@ declare global {
     };
   }
 }
+
 export {};

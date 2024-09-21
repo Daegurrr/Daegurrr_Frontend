@@ -1,10 +1,13 @@
 import { useEffect } from 'react';
 import { useLocationStore } from '../../../stores/useLocationStore';
 import CategoryBtnList from './CategoryBtnList';
-
 import { postUserPosition } from '../../../services/hooks/map/postUserPosition';
 
+import MarkerOverlay from '../../../components/feature/overlay/MarkerOverlay';
+import ReactDOM from 'react-dom';
+
 type Item = {
+  id: number;
   latitude: number;
   longitude: number;
   restType: string;
@@ -25,7 +28,7 @@ const Map = () => {
           setLocation(latitude, longitude);
           try {
             const data: Item[] = await postUserPosition(latitude, longitude);
-            console.log(data); // 데이터를 콘솔에 출력
+            console.log(data);
 
             if (data.length > 0) {
               const container = document.getElementById('map') as HTMLElement;
@@ -35,7 +38,7 @@ const Map = () => {
               };
               const map = new window.kakao.maps.Map(container, options);
 
-              // 마커 추가
+              // 마커 추가 및 클릭 이벤트 설정
               data.forEach((item) => {
                 const markerPosition = new window.kakao.maps.LatLng(
                   item.latitude,
@@ -46,6 +49,27 @@ const Map = () => {
                   position: markerPosition,
                 });
                 marker.setMap(map);
+
+                // 커스텀 오버레이 내용
+                const overlayDiv = document.createElement('div');
+                ReactDOM.render(<MarkerOverlay id={item.id} />, overlayDiv);
+
+                const customOverlay = new window.kakao.maps.CustomOverlay({
+                  position: markerPosition,
+                  content: overlayDiv,
+                  yAnchor: 1,
+                  zIndex: 1,
+                });
+
+                // 마커 클릭 시 커스텀 오버레이 표시
+                window.kakao.maps.event.addListener(marker, 'click', () => {
+                  customOverlay.setMap(map);
+                });
+
+                // 맵 클릭 시 오버레이 숨기기
+                window.kakao.maps.event.addListener(map, 'click', () => {
+                  customOverlay.setMap(null);
+                });
               });
             }
           } catch (error) {
