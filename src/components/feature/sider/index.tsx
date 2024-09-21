@@ -59,23 +59,21 @@ const SiderContainer = styled.div`
   z-index: 999;
   width: 320px;
   height: 100vh;
-
-  overflow-y: auto;
   position: fixed;
 `;
 
 const Sidebar = styled(motion.div)`
-  height: calc(100% - 40px);
+  height: 100%;
   width: calc(100% - 20px);
   border-radius: 0px 20px 20px 0px;
   background-color: #fff;
-  overflow: hidden;
+
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 `;
 
 const Content = styled(motion.div)`
   padding: 16px;
-  overflow-y: auto;
+  height: 100vh;
 `;
 
 const SiderButton = styled.button`
