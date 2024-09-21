@@ -2,48 +2,48 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 type ButtonProps = {
-  backgroundColor?: string;
-  textColor?: string;
+  backgroundcolor?: string;
+  textcolor?: string;
 };
 
 type LogoProps = {
-  backgroundColor?: string;
+  backgroundcolor?: string;
   width?: string;
   height?: string;
   activeSrc?: string;
   inactiveSrc?: string;
-  marginRight?: string;
+  marginright?: string;
 };
 
 const CategoryButton = ({
   children,
-  backgroundColor,
-  textColor,
+  backgroundcolor,
+  textcolor,
   width,
   height,
-  marginRight,
+  marginright,
   activeSrc,
   inactiveSrc,
 }: ButtonProps &
   LogoProps & {
     children: React.ReactNode;
   }) => {
-  const [isActive, setIsActive] = useState<boolean>(false);
+  const [isactive, setisactive] = useState<boolean>(false);
 
   return (
     <ButtonContainer
-      backgroundColor={backgroundColor}
-      textColor={textColor}
-      isActive={isActive}
-      onMouseDown={() => setIsActive(true)}
-      onMouseUp={() => setIsActive(false)}
+      backgroundcolor={backgroundcolor}
+      textcolor={textcolor}
+      isactive={isactive}
+      onMouseDown={() => setisactive(true)}
+      onMouseUp={() => setisactive(false)}
     >
       <ButtonLogo
-        src={isActive ? activeSrc : inactiveSrc}
+        src={isactive ? activeSrc : inactiveSrc}
         width={width}
         height={height}
-        isActive={isActive}
-        marginRight={marginRight}
+        isactive={isactive}
+        marginright={marginright}
       />
       {children}
     </ButtonContainer>
@@ -52,7 +52,7 @@ const CategoryButton = ({
 
 export default CategoryButton;
 
-const ButtonContainer = styled.button<ButtonProps & { isActive: boolean }>`
+const ButtonContainer = styled.button<ButtonProps & { isactive: boolean }>`
   /* width: 100%; */
   height: 34px;
   border-radius: 16px;
@@ -68,18 +68,18 @@ const ButtonContainer = styled.button<ButtonProps & { isActive: boolean }>`
   align-items: center;
 
   border: 0.75px solid #d9d9d9;
-  background-color: ${({ backgroundColor, isActive }) =>
-    isActive ? '#e4000f' : backgroundColor || '#fff'};
-  color: ${({ textColor, isActive }) =>
-    isActive ? '#fff' : textColor || '#747474'};
+  background-color: ${({ backgroundcolor, isactive }) =>
+    isactive ? '#e4000f' : backgroundcolor || '#fff'};
+  color: ${({ textcolor, isactive }) =>
+    isactive ? '#fff' : textcolor || '#747474'};
 
   :hover {
-    background-color: ${({ backgroundColor }) => backgroundColor || '#f0f0f0'};
+    background-color: ${({ backgroundcolor }) => backgroundcolor || '#f0f0f0'};
   }
 `;
 
-const ButtonLogo = styled.img<LogoProps & { isActive: boolean }>`
+const ButtonLogo = styled.img<LogoProps & { isactive: boolean }>`
   width: ${({ width }) => width || 'auto'};
   height: ${({ height }) => height || 'auto'};
-  margin-right: ${({ marginRight }) => marginRight || '0px'};
+  margin-right: ${({ marginright }) => marginright || '0px'};
 `;

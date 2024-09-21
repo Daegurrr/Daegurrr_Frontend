@@ -17,7 +17,7 @@ const categoryButtons = [
     inactiveSrc: InActPark,
     width: '14.12px',
     height: '16px',
-    marginRight: '8px',
+    marginright: '8px',
     label: '공원',
   },
   {
@@ -25,7 +25,7 @@ const categoryButtons = [
     inactiveSrc: InActBank,
     width: '9.93px',
     height: '15.63px',
-    marginRight: '8px',
+    marginright: '8px',
     label: '금융기관',
   },
   {
@@ -33,7 +33,7 @@ const categoryButtons = [
     inactiveSrc: InActWelfare,
     width: '13.72px',
     height: '12px',
-    marginRight: '8px',
+    marginright: '8px',
     label: '행정복지센터',
   },
   {
@@ -41,7 +41,7 @@ const categoryButtons = [
     inactiveSrc: InActOld,
     width: '12.6px',
     height: '18px',
-    marginRight: '8px',
+    marginright: '8px',
     label: '노인시설',
   },
 ];
@@ -50,8 +50,13 @@ const CategoryBtnList = () => {
   return (
     <ButtonListWrapper>
       <LoginBtnWrapper>
-        <CategoryButton backgroundColor="#e4000f" textColor="#fff">
+        <CategoryButton backgroundcolor="#e4000f" textcolor="#fff">
           로그인
+        </CategoryButton>
+      </LoginBtnWrapper>
+      <LoginBtnWrapper>
+        <CategoryButton backgroundcolor="#e4000f" textcolor="#fff">
+          게시판
         </CategoryButton>
       </LoginBtnWrapper>
       <CategoryListWrapper>
@@ -62,7 +67,7 @@ const CategoryBtnList = () => {
             inactiveSrc={button.inactiveSrc}
             width={button.width}
             height={button.height}
-            marginRight={button.marginRight}
+            marginright={button.marginright}
           >
             {button.label}
           </CategoryButton>
