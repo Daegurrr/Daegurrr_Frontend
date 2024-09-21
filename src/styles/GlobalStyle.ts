@@ -14,4 +14,18 @@ export const GlobalStyle = createGlobalStyle`
     line-height: 1.4;
   }
 
+
+  ::-webkit-scrollbar {
+  width: 8px;
+  background-color: #e0e0e0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C1BFBF; /* Color of the scrollbar */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color when hovered */
+}
 `;
