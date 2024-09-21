@@ -1,13 +1,13 @@
 import { RouterProvider } from 'react-router-dom';
 
 import { Router } from './router/Router';
-import { Reset } from 'styled-reset';
 import React from 'react';
+import { GlobalStyle } from './styles/GlobalStyle';
 
 function App() {
   return (
     <React.Fragment>
-      <Reset />
+      <GlobalStyle />
       <RouterProvider router={Router} />
     </React.Fragment>
   );
