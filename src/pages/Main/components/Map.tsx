@@ -2,6 +2,14 @@ import { useEffect } from 'react';
 import { useLocationStore } from '../../../stores/useLocationStore';
 import CategoryBtnList from './CategoryBtnList';
 
+import { postUserPosition } from '../../../services/hooks/map/postUserPosition';
+
+type Item = {
+  latitude: number;
+  longitude: number;
+  restType: string;
+};
+
 const Map = () => {
   const setLocation = useLocationStore((state) => state.setLocation);
   const setAddress = useLocationStore((state) => state.setAddress);
@@ -12,9 +20,37 @@ const Map = () => {
     // 사용자 위치 정보 가져오기
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+        async (position) => {
           const { latitude, longitude } = position.coords;
           setLocation(latitude, longitude);
+          try {
+            const data: Item[] = await postUserPosition(latitude, longitude);
+            console.log(data); // 데이터를 콘솔에 출력
+
+            if (data.length > 0) {
+              const container = document.getElementById('map') as HTMLElement;
+              const options: kakao.maps.MapOptions = {
+                center: new window.kakao.maps.LatLng(latitude, longitude),
+                level: 3,
+              };
+              const map = new window.kakao.maps.Map(container, options);
+
+              // 마커 추가
+              data.forEach((item) => {
+                const markerPosition = new window.kakao.maps.LatLng(
+                  item.latitude,
+                  item.longitude
+                );
+
+                const marker = new window.kakao.maps.Marker({
+                  position: markerPosition,
+                });
+                marker.setMap(map);
+              });
+            }
+          } catch (error) {
+            console.error('데이터 가져오기 실패:', error);
+          }
         },
         (error) => {
           console.error('Error getting location: ', error);

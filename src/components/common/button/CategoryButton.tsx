@@ -6,6 +6,10 @@ type ButtonProps = {
   textcolor?: string;
 };
 
+type ActionProps = {
+  onClick?: () => void;
+};
+
 type LogoProps = {
   backgroundcolor?: string;
   width?: string;
@@ -24,7 +28,9 @@ const CategoryButton = ({
   marginright,
   activeSrc,
   inactiveSrc,
-}: ButtonProps &
+  onClick,
+}: ActionProps &
+  ButtonProps &
   LogoProps & {
     children: React.ReactNode;
   }) => {
@@ -37,6 +43,7 @@ const CategoryButton = ({
       isactive={isactive}
       onMouseDown={() => setisactive(true)}
       onMouseUp={() => setisactive(false)}
+      onClick={onClick}
     >
       <ButtonLogo
         src={isactive ? activeSrc : inactiveSrc}

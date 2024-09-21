@@ -5,8 +5,21 @@ declare global {
       level: number;
     }
 
+    class Size {
+      constructor(width: number, height: number);
+    }
+
+    class MarkerImage {
+      constructor(src: string, size: Size);
+    }
+
     class Map {
       constructor(container: HTMLElement, options: MapOptions);
+    }
+
+    export class Marker {
+      constructor(options: MarkerOptions);
+      setMap(map: Map): void;
     }
 
     class LatLng {
