@@ -1,10 +1,14 @@
 import { useEffect } from 'react';
 import { useLocationStore } from '../../../stores/useLocationStore';
 import CategoryBtnList from './CategoryBtnList';
-
 import { postUserPosition } from '../../../services/hooks/map/postUserPosition';
 
+import MarkerOverlay from '../../../components/feature/overlay/MarkerOverlay';
+import ReactDOM from 'react-dom';
+import { postCategoryData } from '../../../services/hooks/category/postCategoryData';
+
 type Item = {
+  id: number;
   latitude: number;
   longitude: number;
   restType: string;
@@ -16,6 +20,55 @@ const Map = () => {
   const latitude = useLocationStore((state) => state.latitude);
   const longitude = useLocationStore((state) => state.longitude);
 
+  const updateMapWithMarkers = async (facilityType: string) => {
+    try {
+      const data: Item[] = await postCategoryData(facilityType, {
+        latitude: latitude!,
+        longitude: longitude!,
+      });
+      console.log('Received data:', data);
+
+      const container = document.getElementById('map') as HTMLElement;
+
+      // 새로운 지도 인스턴스 생성
+      const map = new window.kakao.maps.Map(container, {
+        center: new window.kakao.maps.LatLng(latitude, longitude),
+        level: 5,
+      });
+
+      // 새로운 마커 추가
+      data.forEach((item) => {
+        console.log('Marker position:', item.latitude, item.longitude);
+
+        const markerPosition = new window.kakao.maps.LatLng(
+          item.latitude,
+          item.longitude
+        );
+        const marker = new window.kakao.maps.Marker({
+          position: markerPosition,
+        });
+        marker.setMap(map);
+
+        // 커스텀 오버레이 생성 및 연결
+        const overlayDiv = document.createElement('div');
+        ReactDOM.render(<MarkerOverlay id={item.id} />, overlayDiv);
+        const customOverlay = new window.kakao.maps.CustomOverlay({
+          position: markerPosition,
+          content: overlayDiv,
+          yAnchor: 1,
+          zIndex: 1,
+        });
+
+        // 마커 클릭 시 오버레이 표시
+        window.kakao.maps.event.addListener(marker, 'click', () => {
+          customOverlay.setMap(map);
+        });
+      });
+    } catch (error) {
+      console.error('카테고리 데이터 가져오기 실패:', error);
+    }
+  };
+
   useEffect(() => {
     // 사용자 위치 정보 가져오기
     if (navigator.geolocation) {
@@ -25,7 +78,7 @@ const Map = () => {
           setLocation(latitude, longitude);
           try {
             const data: Item[] = await postUserPosition(latitude, longitude);
-            console.log(data); // 데이터를 콘솔에 출력
+            console.log(data);
 
             if (data.length > 0) {
               const container = document.getElementById('map') as HTMLElement;
@@ -35,7 +88,7 @@ const Map = () => {
               };
               const map = new window.kakao.maps.Map(container, options);
 
-              // 마커 추가
+              // 마커 추가 및 클릭 이벤트 설정
               data.forEach((item) => {
                 const markerPosition = new window.kakao.maps.LatLng(
                   item.latitude,
@@ -46,6 +99,27 @@ const Map = () => {
                   position: markerPosition,
                 });
                 marker.setMap(map);
+
+                // 커스텀 오버레이 내용
+                const overlayDiv = document.createElement('div');
+                ReactDOM.render(<MarkerOverlay id={item.id} />, overlayDiv);
+
+                const customOverlay = new window.kakao.maps.CustomOverlay({
+                  position: markerPosition,
+                  content: overlayDiv,
+                  yAnchor: 1,
+                  zIndex: 1,
+                });
+
+                // 마커 클릭 시 커스텀 오버레이 표시
+                window.kakao.maps.event.addListener(marker, 'click', () => {
+                  customOverlay.setMap(map);
+                });
+
+                // 맵 클릭 시 오버레이 숨기기
+                window.kakao.maps.event.addListener(map, 'click', () => {
+                  customOverlay.setMap(null);
+                });
               });
             }
           } catch (error) {
@@ -111,7 +185,7 @@ const Map = () => {
         id="map"
         style={{ width: '100%', height: '100vh', position: 'relative' }}
       />
-      <CategoryBtnList />
+      <CategoryBtnList onCategorySelect={updateMapWithMarkers} />
     </>
   );
 };

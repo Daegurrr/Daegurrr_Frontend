@@ -18,38 +18,48 @@ const categoryButtons = [
   {
     activeSrc: ActPark,
     inactiveSrc: InActPark,
-    width: "14.12px",
-    height: "16px",
-    marginright: "8px",
-    label: "공원",
+    width: '14.12px',
+    height: '16px',
+    marginright: '8px',
+    label: '공원',
+    facilityType: 'PARK',
+
   },
   {
     activeSrc: ActBank,
     inactiveSrc: InActBank,
-    width: "9.93px",
-    height: "15.63px",
-    marginright: "8px",
-    label: "금융기관",
+    width: '9.93px',
+    height: '15.63px',
+    marginright: '8px',
+    label: '금융기관',
+    facilityType: 'FINANCIAL_INSTITUTION',
+
   },
   {
     activeSrc: ActWelfare,
     inactiveSrc: InActWelfare,
-    width: "13.72px",
-    height: "12px",
-    marginright: "8px",
-    label: "행정복지센터",
+    width: '13.72px',
+    height: '12px',
+    marginright: '8px',
+    label: '행정복지센터',
+    facilityType: 'LOCAL_OFFICE',
   },
   {
     activeSrc: ActOld,
     inactiveSrc: InActOld,
-    width: "12.6px",
-    height: "18px",
-    marginright: "8px",
-    label: "노인시설",
+    width: '12.6px',
+    height: '18px',
+    marginright: '8px',
+    label: '노인시설',
+    facilityType: 'SENIOR_CENTER',
   },
 ];
 
-const CategoryBtnList = () => {
+type CategoryBtnListProps = {
+  onCategorySelect: (facilityType: string) => void;
+};
+
+const CategoryBtnList = ({ onCategorySelect }: CategoryBtnListProps) => {
   const link = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
     import.meta.env.VITE_APP_REST_API_KEY
   }&redirect_uri=${import.meta.env.VITE_APP_REDIRECT_URL}
@@ -140,6 +150,7 @@ const CategoryBtnList = () => {
             width={button.width}
             height={button.height}
             marginright={button.marginright}
+            onClick={() => onCategorySelect(button.facilityType)}
           >
             {button.label}
           </CategoryButton>
