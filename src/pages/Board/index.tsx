@@ -1,14 +1,19 @@
 import Img from "../../assets/Daefree.png"
 import styled from "styled-components";
 import { getPostList } from "../../services/hooks/board/getPostList";
+import { getPost } from "../../services/hooks/board/getPost";
 import { useEffect,useState } from "react";
 import Post from "./components/Post";
 import { PostItemResponseData } from "../../services/hooks/board/getPostList";
+import { PostResponseData } from "../../services/hooks/board/getPost";
 import CategoryButton from "../../components/common/button/CategoryButton";
+import PostDetail from "./components/PostDetail";
 
 const BoardPage = () => {
     const [data, setData] = useState<PostItemResponseData[] | null>(null);
+    const [selectedItem, setSelectedItem] = useState<PostResponseData | null>(null);
     const [page, setPage] = useState(0);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
     
 
     useEffect(() => {
@@ -27,8 +32,33 @@ const BoardPage = () => {
         setPage(pageNumber);
     }
 
+    const handleItemClick = async (itemId: number) => {
+        try {
+            const response = await getPost(itemId); // 세부 조회 API
+            setSelectedItem(response);
+            setIsPopupOpen(true);
+            } catch (error) {
+                console.error('게시글 단건 조회 실패:', error);
+            }
+        };
+        
+        const closePopup = () => {
+            setIsPopupOpen(false);
+            setSelectedItem(null);
+        };
+
     return (
     <Wrapper>
+        {isPopupOpen && selectedItem && (
+            <>
+            <PostDetail key={selectedItem.id} item={selectedItem}/>
+            <button onClick={closePopup} style={{zIndex: 10, position: 'fixed', top:'90px',right:'160px'}}>닫기</button>
+            </>
+        )}
+
+
+
+
     <Logo src={Img} alt="logo"/>
     <RowWrapper>
         <CategoryButton backgroundcolor='#e4000f' textcolor="#fff">쉼터 찾기</CategoryButton>
@@ -36,14 +66,15 @@ const BoardPage = () => {
     </RowWrapper>
     <CategoryButton textcolor="#747474">글쓰기</CategoryButton>
     <BoldLine/>
-    {data && data.length > 0 ? (
-    data.map((item: PostItemResponseData, index: number) => (
-        <Post key={index} item={item} />
-    ))
-    ) : (
-        <p>기다려~~~</p>
-    )}
+    {data && data.length > 0 
+    ? (data.map((item: PostItemResponseData, index: number) => (
+        <Post key={index} item={item} onClick={() => handleItemClick(item.id)}/>
+    ))) 
+    : ( <p>기다려~~~</p> )}
     <Line/>
+
+
+
 
     {/* 페이지네이션 버튼 */}
     <PageButton>

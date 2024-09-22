@@ -1,11 +1,15 @@
 import styled from "styled-components";
 import { PostItemResponseData } from "../../../services/hooks/board/getPostList";
 
+interface PostProps {
+    item: PostItemResponseData;
+    onClick: (id:number) => void;
+  }
 
-const Post = ({item}:{item:PostItemResponseData}) => {
+const Post: React.FC<PostProps> = ({ item, onClick }) => {
     return (
         <>
-        <Wrapper>
+        <Wrapper onClick={() => onClick(item.id)}>
         <Title>{`${item.title}`}</Title>
         <RowWrapper>
             <Text>{`${item.author}`}</Text><Seperator/>
