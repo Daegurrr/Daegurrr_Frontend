@@ -8,6 +8,7 @@ export type PostListResponseData = {
 };
 
 export type PostItemResponseData = {
+    id: number;
     title: string;
     author: string;
     createAt: string;
