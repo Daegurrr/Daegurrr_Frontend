@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 
 type ButtonProps = {
@@ -6,6 +5,7 @@ type ButtonProps = {
   textcolor?: string;
   activeBackgroundColor?: string;
   activeTextColor?: string;
+  isActive?: boolean; // active 상태를 외부에서 받을 수 있도록 props 추가
 };
 
 type ActionProps = {
@@ -30,28 +30,24 @@ const CategoryButton = ({
   marginright,
   activeSrc,
   inactiveSrc,
+  isActive = false, // 기본값은 false로 설정
   onClick,
 }: ActionProps &
   ButtonProps &
   LogoProps & {
     children: React.ReactNode;
   }) => {
-  const [isactive, setisactive] = useState<boolean>(false);
-
   return (
     <ButtonContainer
       backgroundcolor={backgroundcolor}
       textcolor={textcolor}
-      isactive={isactive}
-      onMouseDown={() => setisactive(true)}
-      onMouseUp={() => setisactive(false)}
-      onClick={onClick}
+      isActive={isActive}
+      onClick={onClick} // onClick 함수가 있으면 실행
     >
       <ButtonLogo
-        src={isactive ? activeSrc : inactiveSrc}
+        src={isActive ? activeSrc : inactiveSrc}
         width={width}
         height={height}
-        isactive={isactive}
         marginright={marginright}
       />
       {children}
@@ -61,8 +57,7 @@ const CategoryButton = ({
 
 export default CategoryButton;
 
-const ButtonContainer = styled.button<ButtonProps & { isactive: boolean }>`
-  /* width: 100%; */
+const ButtonContainer = styled.button<ButtonProps & { isActive: boolean }>`
   height: 34px;
   border-radius: 16px;
   padding: 8px 12px;
@@ -77,17 +72,17 @@ const ButtonContainer = styled.button<ButtonProps & { isactive: boolean }>`
   align-items: center;
 
   border: 0.75px solid #d9d9d9;
-  background-color: ${({ backgroundcolor, isactive }) =>
-    isactive ? '#e4000f' : backgroundcolor || '#fff'};
-  color: ${({ textcolor, isactive }) =>
-    isactive ? '#fff' : textcolor || '#747474'};
+  background-color: ${({ backgroundcolor, isActive }) =>
+    isActive ? '#e4000f' : backgroundcolor || '#fff'};
+  color: ${({ textcolor, isActive }) =>
+    isActive ? '#fff' : textcolor || '#747474'};
 
   :hover {
     background-color: ${({ backgroundcolor }) => backgroundcolor || '#f0f0f0'};
   }
 `;
 
-const ButtonLogo = styled.img<LogoProps & { isactive: boolean }>`
+const ButtonLogo = styled.img<LogoProps & { isActive: boolean }>`
   width: ${({ width }) => width || 'auto'};
   height: ${({ height }) => height || 'auto'};
   margin-right: ${({ marginright }) => marginright || '0px'};
